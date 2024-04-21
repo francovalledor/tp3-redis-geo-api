@@ -35,6 +35,18 @@ services:
     ports:
       - 6379:6379
 
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - 5540:5540
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    volumes:
+      - ../redis-insight/:/data
+
 volumes:
   ignore:
   ignore2:
