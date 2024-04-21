@@ -1,15 +1,48 @@
-import { Episode } from "./types";
+import { Place } from "./types";
 
 const HOST = `http://localhost:3000`;
 
-const BASE_URL = `${HOST}/the-mandalorian/`;
+const BASE_URL = `${HOST}/geo/`;
 
-const fetchJson = async <T>(...params: Parameters<typeof fetch>): Promise<T> => fetch(...params).then(res => res.json())
+const fetchJson = async <T>(...params: Parameters<typeof fetch>): Promise<T> =>
+  fetch(...params).then((res) => res.json());
 
-export const fetchAllEpisodes = () => fetchJson<Episode[]>(BASE_URL);
+export const getAllPois = () => fetchJson<string[]>(`${BASE_URL}/pois`);
 
-export const fetchEpisodeDetails = (season: number, episode: number) => fetchJson<Episode>(`${BASE_URL}/episode?season=${season}&episode=${episode}`);
+export type SearchReturnType = {
+  name: string;
+  distance: string;
+  coordinates: { latitude: string; longitude: string };
+}[];
 
-export const reserve = (season: number, episode: number) => fetch(`${BASE_URL}/reserve?season=${season}&episode=${episode}`, {method: "POST"});
+export const search = async (
+  poi: string,
+  latitude: number,
+  longitude: number,
+  radious: number
+) => {
+  const url = new URL(`${BASE_URL}/search`);
 
-export const pay = (season: number, episode: number) => fetch(`${BASE_URL}/pay?season=${season}&episode=${episode}`, {method: "POST"});
+  Object.entries({ poi, latitude, longitude, radious }).forEach(
+    ([key, value]) => url.searchParams.append(key, String(value))
+  );
+
+  return fetchJson<SearchReturnType>(url.toString());
+};
+
+export const addPoi = (name: string) =>
+  fetch(`${BASE_URL}/pois`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+
+export const addPlace = (poiName: string, place: Place) =>
+  fetch(`${BASE_URL}/pois/${poiName}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(place),
+  });
+
+export const listPlaces = (poiName: string) =>
+  fetchJson<SearchReturnType>(`${BASE_URL}/pois/${poiName}`);

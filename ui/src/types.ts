@@ -1,15 +1,5 @@
-export type Episode = {
+export type Place = {
   name: string;
-  season: number;
-  episode: number;
-  cast: CastItem[];
-  status: EPISODE_STATUS;
+  latitude: number;
+  longitude: number;
 };
-
-export type CastItem = { actor: string; characters: string[] };
-
-export enum EPISODE_STATUS {
-  RESERVED = "RESERVED",
-  RENTED = "RENTED",
-  AVAILABLE = "AVAILABLE",
-}
