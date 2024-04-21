@@ -33,13 +33,21 @@ const nearby: RequestHandler = async (req, res) => {
   res.send(result);
 };
 
+const listPlaces: RequestHandler = async (req, res) => {
+  const poi = validateMandatoryString("poi", req.params);
+
+  const response = await service.getAllPlaces(poi);
+
+  res.send(response);
+};
+
 const listPOIs: RequestHandler = async (req, res) => {
   const result = await service.listPOIs();
 
   res.send(result);
 };
 
-export default { addPointOfInterest, listPOIs, addPlace, nearby };
+export default { addPointOfInterest, listPOIs, addPlace, nearby, listPlaces };
 
 type RequestInputs = Request["query"] | Request["params"] | Request["body"];
 

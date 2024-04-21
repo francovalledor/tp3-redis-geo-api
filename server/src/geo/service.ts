@@ -67,6 +67,22 @@ const nearby = async (
   });
 };
 
-export default { addPOI, listPOIs, addPlaces, nearby };
+const getAllPlaces = async (poi: string) => {
+  const poiKey = REDIS_KEYS.POI(poi);
+
+  const replyWith = ["WITHCOORD"] as GeoReplyWith[];
+
+  const result = await redisClient.geoSearchWith(
+    poiKey, {latitude: 0, longitude: 0}, {radius: 1000000, unit: "km"}, replyWith
+  );
+
+  return result.map(each => {
+    const {member: name, ...rest} = each;
+    
+    return {name, ...rest}
+  });
+};
+
+export default { addPOI, listPOIs, addPlaces, nearby, getAllPlaces };
 
 export type Place = { latitude: number; longitude: number; name: string };
