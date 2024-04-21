@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+      - 9229:9229 # debugger
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - './server:/app'
+      ## Enable HMR https://medium.com/@kartikio/setup-node-ts-local-development-environment-with-docker-and-hot-reloading-922db9016119
+      - ignore:/app/node_modules/
+    restart: always
+
+  ui: 
+    build:
+      context: ./ui
+      dockerfile: Dockerfile.dev
+    ports:
+      - 5173:5173
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - './ui:/app'
+      ## Enable HMR https://medium.com/@kartikio/setup-node-ts-local-development-environment-with-docker-and-hot-reloading-922db9016119
+      - ignore2:/app/node_modules/
+    restart: always
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
+volumes:
+  ignore:
+  ignore2:

@@ -1,0 +1,16 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json ./
+COPY tsconfig.json ./
+COPY src/ ./src/
+
+## Enable HMR https://medium.com/@kartikio/setup-node-ts-local-development-environment-with-docker-and-hot-reloading-922db9016119
+ENV PATH=/app/node_modules/.bin:$PATH
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
