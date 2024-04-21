@@ -127,6 +127,31 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "List places",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/geo/pois/:poiName",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"geo",
+						"pois",
+						":poiName"
+					],
+					"variable": [
+						{
+							"key": "poiName",
+							"value": "Facultades"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
