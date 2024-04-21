@@ -1,12 +1,12 @@
 import { Request, RequestHandler } from "express";
 import service from "./service";
-import { capitalize, isInteger, isString, isUndefined } from "lodash";
+import { isString, isUndefined } from "lodash";
 import createHttpError from "http-errors";
 import { StatusCodes } from "http-status-codes";
 
 const addPointOfInterest: RequestHandler = async (req, res) => {
   const name = validateMandatoryString("name", req.body);
-  await service.addPOI(capitalize(name));
+  await service.addPOI(name);
 
   res.sendStatus(StatusCodes.CREATED);
 };
@@ -17,7 +17,7 @@ const addPlace: RequestHandler = async (req, res) => {
   const latitude = validateMandatoryNumber("latitude", req.body);
   const longitude = validateMandatoryNumber("longitude", req.body);
 
-  await service.addPlaces([{ name: capitalize(placeName), latitude, longitude }], capitalize(poiName));
+  await service.addPlaces([{ name: placeName, latitude, longitude }], poiName);
 
   res.sendStatus(StatusCodes.CREATED);
 };

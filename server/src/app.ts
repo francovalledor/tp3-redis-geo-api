@@ -5,6 +5,7 @@ import { router as geoRouter } from "./geo/router";
 import { errorHandler } from "./errorHandler";
 import { disableCorsMiddleware } from "./disableCorsMiddleware";
 import bodyParser from "body-parser";
+import service from "./geo/service";
 
 const SERVER_PORT = process.env.PORT || 3000;
 
@@ -27,6 +28,8 @@ const initApp = async () => {
     redisClient.quit();
     process.exit();
   });
+
+  await service.preloadPlaces();
 };
 
 initApp();

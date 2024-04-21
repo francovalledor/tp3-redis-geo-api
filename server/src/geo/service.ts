@@ -1,9 +1,13 @@
+import { capitalize, entries } from "lodash";
 import redisClient from "../redisClient";
 import {
   GeoSearchFrom,
   GeoSearchBy,
   GeoReplyWith,
 } from "@redis/client/dist/lib/commands/generic-transformers";
+import { preloadedPlaces } from "./data";
+import { Place } from "./types";
+
 
 const PREFIX = "geo";
 
@@ -13,8 +17,24 @@ const REDIS_KEYS = {
   POIItems: (poiName: string) => `${PREFIX}:POI_ITEMS:${poiName}`,
 };
 
+const preloadPlaces = async () => {
+  const preloadDoneKey = `${PREFIX}::data-pre-loaded`;
+
+  const isAlreadyPreloaded = await redisClient.get(preloadDoneKey);
+
+  if (isAlreadyPreloaded) return;
+
+  for (const [poi, places] of entries(preloadedPlaces)) {
+    await addPlaces(places, poi); 
+  }
+
+  await redisClient.set(preloadDoneKey, 1);
+
+  console.log("Data preloaded successfully ✅")
+};
+
 const addPOI = async (poiName: string) => {
-  await redisClient.sAdd(REDIS_KEYS.POIList, [poiName]);
+  await redisClient.sAdd(REDIS_KEYS.POIList, [capitalize(poiName)]);
 };
 
 const listPOIs = async () => {
@@ -22,8 +42,10 @@ const listPOIs = async () => {
 };
 
 const addPlaces = async (places: Place[], poi: string) => {
-  await addPOI(poi);
-  const poiKey = REDIS_KEYS.POI(poi);
+  const poiName = capitalize(poi);
+
+  await addPOI(poiName);
+  const poiKey = REDIS_KEYS.POI(poiName);
 
   const mappedPlaces = places.map((place) => {
     const { latitude, longitude, name: member } = place;
@@ -40,7 +62,7 @@ const nearby = async (
   longitude: number,
   radius: number
 ) => {
-  const poiKey = REDIS_KEYS.POI(poi);
+  const poiKey = REDIS_KEYS.POI(capitalize(poi));
 
   const from: GeoSearchFrom = {
     latitude,
@@ -68,7 +90,7 @@ const nearby = async (
 };
 
 const getAllPlaces = async (poi: string) => {
-  const poiKey = REDIS_KEYS.POI(poi);
+  const poiKey = REDIS_KEYS.POI(capitalize(poi));
 
   const replyWith = ["WITHCOORD"] as GeoReplyWith[];
 
@@ -83,6 +105,4 @@ const getAllPlaces = async (poi: string) => {
   });
 };
 
-export default { addPOI, listPOIs, addPlaces, nearby, getAllPlaces };
-
-export type Place = { latitude: number; longitude: number; name: string };
+export default { addPOI, listPOIs, addPlaces, nearby, getAllPlaces, preloadPlaces };
