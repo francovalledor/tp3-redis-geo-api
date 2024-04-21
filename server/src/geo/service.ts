@@ -1,5 +1,9 @@
 import redisClient from "../redisClient";
-import { fromPairs, sortBy } from "lodash";
+import {
+  GeoSearchFrom,
+  GeoSearchBy,
+  GeoReplyWith,
+} from "@redis/client/dist/lib/commands/generic-transformers";
 
 const PREFIX = "geo";
 
@@ -30,6 +34,39 @@ const addPlaces = async (places: Place[], poi: string) => {
   await redisClient.geoAdd(poiKey, mappedPlaces);
 };
 
-export default { addPOI, listPOIs, addPlaces };
+const nearby = async (
+  poi: string,
+  latitude: number,
+  longitude: number,
+  radius: number
+) => {
+  const poiKey = REDIS_KEYS.POI(poi);
+
+  const from: GeoSearchFrom = {
+    latitude,
+    longitude,
+  };
+
+  const by: GeoSearchBy = {
+    radius,
+    unit: "km",
+  };
+
+  const replyWith = ["WITHDIST", "WITHCOORD"] as GeoReplyWith[];
+
+  await redisClient.geoSearchWith(poiKey, from, by, replyWith);
+
+  const result = await redisClient.geoSearchWith(
+    poiKey, {latitude, longitude}, {radius, unit: "km"}, replyWith
+  );
+
+  return result.map(each => {
+    const {member: name, ...rest} = each;
+
+    return {name, ...rest};
+  });
+};
+
+export default { addPOI, listPOIs, addPlaces, nearby };
 
 export type Place = { latitude: number; longitude: number; name: string };

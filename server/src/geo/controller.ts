@@ -17,9 +17,20 @@ const addPlace: RequestHandler = async (req, res) => {
   const latitude = validateMandatoryNumber("latitude", req.body);
   const longitude = validateMandatoryNumber("longitude", req.body);
 
-  await service.addPlaces([{ name: placeName, latitude, longitude }], poiName);
+  await service.addPlaces([{ name: capitalize(placeName), latitude, longitude }], capitalize(poiName));
 
   res.sendStatus(StatusCodes.CREATED);
+};
+
+const nearby: RequestHandler = async (req, res) => {
+  const poi = validateMandatoryString("poi", req.query);
+  const latitude = validateMandatoryNumber("latitude", req.query);
+  const longitude = validateMandatoryNumber("longitude", req.query);
+  const radius = validateMandatoryNumber("radius", req.query);
+
+  const result = await service.nearby(poi, latitude, longitude, radius);
+
+  res.send(result);
 };
 
 const listPOIs: RequestHandler = async (req, res) => {
@@ -28,7 +39,7 @@ const listPOIs: RequestHandler = async (req, res) => {
   res.send(result);
 };
 
-export default { addPointOfInterest, listPOIs, addPlace };
+export default { addPointOfInterest, listPOIs, addPlace, nearby };
 
 type RequestInputs = Request["query"] | Request["params"] | Request["body"];
 
