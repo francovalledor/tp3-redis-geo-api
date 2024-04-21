@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "2145019a-a116-4adb-a45b-9e822dc3988a",
+		"name": "Geo Redis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26759011"
+	},
+	"item": [
+		{
+			"name": "Get all POIs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/geo/pois",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"geo",
+						"pois"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/geo/search?poi=Facultades&radius=20&latitude=-32.48563839188407&longitude=-58.23371223230244",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"geo",
+						"search"
+					],
+					"query": [
+						{
+							"key": "poi",
+							"value": "Facultades"
+						},
+						{
+							"key": "radius",
+							"value": "20"
+						},
+						{
+							"key": "latitude",
+							"value": "-32.48563839188407"
+						},
+						{
+							"key": "longitude",
+							"value": "-58.23371223230244"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add POI",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Plazas\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/geo/pois",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"geo",
+						"pois"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "PLAZAS",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Place",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"UADER FCyT\",\n    \"latitude\": -32.4791321466971,\n    \"longitude\": -58.23344250267153\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/geo/pois/:poiName",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"geo",
+						"pois",
+						":poiName"
+					],
+					"variable": [
+						{
+							"key": "poiName",
+							"value": "Facultades"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
