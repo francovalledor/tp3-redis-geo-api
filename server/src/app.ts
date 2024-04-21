@@ -4,10 +4,13 @@ import redisClient from "./redisClient";
 import { router as geoRouter } from "./geo/router";
 import { errorHandler } from "./errorHandler";
 import { disableCorsMiddleware } from "./disableCorsMiddleware";
+import bodyParser from "body-parser";
 
 const SERVER_PORT = process.env.PORT || 3000;
 
 const app = express();
+
+app.use(bodyParser.json());
 app.use(disableCorsMiddleware);
 
 app.use("/geo", geoRouter);
