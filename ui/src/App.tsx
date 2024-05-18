@@ -9,6 +9,7 @@ import { addPlace, addPoi, getAllPois } from './fetch';
 import AddPoi from './AddPoi';
 import AddPlace from './AddPlace';
 import { Place } from './types';
+import Search from './Search';
 
 function App() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Pois selectedPoi={selectedPoi} setSelectedPoi={setSelectedPoi}/>}></Route>
         <Route path='/pois' element={<Pois selectedPoi={selectedPoi} setSelectedPoi={setSelectedPoi}/>} />
-        <Route path='/search' element={<div>SEARCH</div>} />
+        <Route path='/search' element={<Search poiList={poiList}/>} />
         <Route path='/add-poi' element={<AddPoi addPoi={handleAddPoi}/>} />
         <Route path='/add-place' element={<AddPlace addPlace={handleAddPlace} poiList={poiList}/> } />
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,11 +1,7 @@
 import React, { useRef } from "react";
 import { InputGroup, Form, Button } from "react-bootstrap";
 import { Place } from "./types";
-
-const PLAZA_CDELU = {
-  latitude: -32.48466173466737,
-  longitude: -58.23210006838209,
-};
+import { PLAZA_CDELU } from "./PlazaCdelU";
 
 interface Props {
   addPlace: (poiName: string, place: Place) => void;

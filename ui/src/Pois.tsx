@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { SearchReturnType, getAllPois, listPlaces } from "./fetch";
 import { Container, ListGroup, Nav, Navbar } from "react-bootstrap";
-import AddPlace from "./AddPlace";
 
-const PoiList: React.FC<{
+const PoiList: React.FC<{  
   onPoiSelect: (name: string) => void;
   selected: string;
 }> = ({ onPoiSelect, selected }) => {

@@ -19,11 +19,11 @@ export const search = async (
   poi: string,
   latitude: number,
   longitude: number,
-  radious: number
+  radius: number
 ) => {
   const url = new URL(`${BASE_URL}/search`);
 
-  Object.entries({ poi, latitude, longitude, radious }).forEach(
+  Object.entries({ poi, latitude, longitude, radius }).forEach(
     ([key, value]) => url.searchParams.append(key, String(value))
   );
 
